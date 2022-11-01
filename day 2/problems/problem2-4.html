@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
+    * {
+      font-family: 'Jua', sans-serif;
+    }
+
     .done {
       text-decoration: line-through;
       color: gray;
@@ -15,7 +19,7 @@
 <body>
   <h1>Todo List</h1>  
   <div id="app">
-    <select v-model="status" @>
+    <select v-model="status">
       <option value="all">전체</option>
       <option value="ing">진행중</option>
       <option value="done">완료</option>
@@ -29,6 +33,9 @@
       </li>
     </ul>
     <button @click="deleteTodo">완료 목록 삭제</button>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -68,6 +75,7 @@
         addTodo: function() {
           if (!this.inputText) {
             alert('입력 해라..')
+            return
           } else {
             const todo = {
             title: this.inputText,
