@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Noto Sans KR', sans-serif;
+      color: rgb(38, 38, 38);
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 500px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #50B8E7;
+    }
+
+    .buttonArea {
+      margin: 0 auto;
+      width: 80%;
+    }
+
+    .buttonRow {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      height: 80px;
+    }
+
+    .btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 45%;
+      border: 1px solid #50B8E7;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 10px;
+      outline: none;
+      background: none;
+      border: 1px solid #50B8E7;
+      width: 100px;
+      height: 50px;
+      cursor: pointer;
+      font-size: large;
+    }
+
+    .result:hover {
+      background-color: #B9E2F5;
+    }
+
+    .type {
+      font-size: x-large;
+      font-weight: bold;
+    }
+
+    .selected {
+      background-color: #B9E2F5;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <h1>MBTI 검사기</h1>
+      <section class="buttonArea">
+        <div class="buttonRow">
+          <div class="btn" :class='{selected: btnColor[0]}' @click="clickBtn(0)">
+            <span class="type">E</span>
+            <span>외향형</span>
+          </div>
+          <div class="btn" :class="{selected: btnColor[1]}" @click="clickBtn(1)">
+            <span class="type">I</span>
+            <span>내향형</span>
+          </div>
+        </div>
+        <div class="buttonRow">
+          <div class="btn" :class='{selected: btnColor[2]}' @click="clickBtn(2)">
+            <span class="type">S</span>
+            <span>감각형</span>
+          </div>
+          <div class="btn" :class='{selected: btnColor[3]}' @click="clickBtn(3)">
+            <span class="type">N</span>
+            <span>직관형</span>
+          </div>
+        </div>
+        <div class="buttonRow">
+          <div class="btn" :class='{selected: btnColor[4]}' @click="clickBtn(4)">
+            <span class="type">T</span>
+            <span>사고형</span>
+          </div>
+          <div class="btn" :class='{selected: btnColor[5]}' @click="clickBtn(5)">
+            <span class="type">F</span>
+            <span>감정형</span>
+          </div>
+        </div>
+        <div class="buttonRow">
+          <div class="btn" :class='{selected: btnColor[6]}' @click="clickBtn(6)">
+            <span class="type">J</span>
+            <span>판단형</span>
+          </div>
+          <div class="btn" :class='{selected: btnColor[7]}' @click="clickBtn(7)">
+            <span class="type">P</span>
+            <span>인식형</span>
+          </div>
+        </div>
+      </section>
+      <button class="result" @click="resultBtn">결과 보기</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    // const result = ['', '', '', '']
+    // console.log(Boolean(result[0]))
+    const app = new Vue({
+      el: '#app',
+      data: {
+        btnColor: [false, false, false, false, false, false, false, false],
+        test: [2, 4, 6, 8],
+        result: ['', '', '', '',],
+        flag: true
+      },
+      methods: {
+        clickBtn: function(num) {
+          // console.log(event.target.firstChild)
+          // console.log(this.test[num])
+          // this.btnColor[num] = !this.btnColor[num]
+          this.btnColor.splice(num, 1, !this.btnColor[num])
+          console.log(this.btnColor)
+          if (num === 0 && this.btnColor[0] === true && this.btnColor[1] === true) {
+            this.btnColor.splice(1, 1, false)
+          }else if (num === 1 && this.btnColor[0] === true && this.btnColor[1] === true) {
+            this.btnColor.splice(0, 1, false)
+          }else if (num === 2 && this.btnColor[2] === true && this.btnColor[3] === true) {
+            this.btnColor.splice(3, 1, false)
+          }else if (num === 3 && this.btnColor[2] === true && this.btnColor[3] === true) {
+            this.btnColor.splice(2, 1, false)
+          }else if (num === 4 && this.btnColor[4] === true && this.btnColor[5] === true) {
+            this.btnColor.splice(5, 1, false)
+          }else if (num === 5 && this.btnColor[4] === true && this.btnColor[5] === true) {
+            this.btnColor.splice(4, 1, false)
+          }else if (num === 6 && this.btnColor[6] === true && this.btnColor[7] === true) {
+            this.btnColor.splice(7, 1, false)
+          }else if (num === 7 && this.btnColor[6] === true && this.btnColor[7] === true) {
+            this.btnColor.splice(6, 1, false)
+          }
+          const word = this.btnColor[num] ? event.target.firstChild.innerText : '';
+          console.log(word)
+          
+          if (num === 0 || num == 1) {
+            this.result.splice(0, 1, word)
+          }else if (num === 2 || num == 3) {
+            this.result.splice(1, 1, word)
+          }else if (num === 4 || num == 5) {
+            this.result.splice(2, 1, word)
+          }else if (num === 6 || num == 7) {
+            this.result.splice(3, 1, word)
+          }
+          console.log(this.result)
+        },
+        resultBtn: function() {
+          this.result.forEach(word => {
+            if (!word) {
+              this.flag = false
+              return
+            }
+          })
+          if (this.flag === false) {
+            alert('4개 선택해라...')
+          }else {
+            const joinWord = this.result.join('')
+            window.location.href = `https://www.16personalities.com/ko/%EC%84%B1%EA%B2%A9%EC%9C%A0%ED%98%95-${joinWord}`
+          }
+        }
+     }
+
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .done {
+      text-decoration: line-through;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <h1>Todo List</h1>  
+  <div id="app">
+    <select v-model="status" @>
+      <option value="all">전체</option>
+      <option value="ing">진행중</option>
+      <option value="done">완료</option>
+    </select>
+    <input type="text" v-model.trim="inputText" @keyup.enter="addTodo">
+    <button @click="addTodo">+</button>
+    <ul>
+      <li v-for="todo in todosByStatus" :key="todo.id">
+        <input type="checkbox" @click="toggleTodoCompleted(todo)" :checked="todo.completed">
+        <span :class="{done: todo.completed}">{{ todo.title }}</span>
+      </li>
+    </ul>
+    <button @click="deleteTodo">완료 목록 삭제</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const TODO_APP_KEY = 'vue-todo-app'
+    const todoStorage = {
+      save: function(data) {
+        // 로컬스토리지에 저장한다.
+        window.localStorage.setItem(TODO_APP_KEY, JSON.stringify(data))
+      },
+      fetch: function() {
+        // 로컬스토리지에서 읽어온다.
+        return JSON.parse(localStorage.getItem(TODO_APP_KEY))
+
+      }
+    }
+    const app = new Vue({
+      el: '#app',
+      data: {
+        status: 'all',
+        inputText: '',
+        todos: todoStorage.fetch() || [],
+      },
+      watch: {
+        todos: {
+          deep: true,
+          handler: function(todos) {
+            todoStorage.save(todos)
+          },
+        }
+      },
+      methods: {
+        toggleTodoCompleted: function(todo) {
+          console.log(todo.title)
+          todo.completed = !todo.completed
+        },
+        addTodo: function() {
+          if (!this.inputText) {
+            alert('입력 해라..')
+          } else {
+            const todo = {
+            title: this.inputText,
+            completed: false,
+            id: new Date().getTime()
+          }
+          this.todos.push(todo)
+          }
+          this.inputText = ''
+        },
+        deleteTodo: function() {
+          console.log('delete')
+          this.todos = this.todos.filter(todo => {
+            return !todo.completed
+          })
+        }
+      },
+      computed: {
+        todosByStatus: function() {
+          return this.todos.filter(todo => {
+            if (this.status == 'ing') {
+              return !todo.completed
+            }else if (this.status == 'done') {
+              return todo.completed
+            }else {
+              return true
+            }
+          })
+        }
+      },
+    })
+  </script>
+</body>
+</html>
